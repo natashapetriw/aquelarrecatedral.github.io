@@ -84,12 +84,16 @@
       font-weight: 500 !important;
     }
     .nav-cta:hover { background: var(--ember) !important; color: var(--white) !important; }
-    .hamburger { display: none; cursor: pointer; }
+    .hamburger { display: none; cursor: pointer; z-index: 110; }
     .hamburger span {
       display: block; width: 24px; height: 2px;
       background: var(--snow); margin: 5px 0;
-      transition: 0.3s;
+      transition: transform 0.3s, opacity 0.3s;
     }
+    /* Hamburguesa -> X cuando el menú está abierto */
+    nav.menu-open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    nav.menu-open .hamburger span:nth-child(2) { opacity: 0; }
+    nav.menu-open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* ─── HERO ─── */
     #hero {
@@ -739,6 +743,23 @@
       nav { padding: 1.2rem 1.5rem; }
       .nav-links { display: none; }
       .hamburger { display: block; }
+      /* Menú desplegable en celular */
+      nav.menu-open .nav-links {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(26,42,30,0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(201,169,110,0.15);
+        padding: 1.6rem 1.5rem 2rem;
+      }
+      nav.menu-open .nav-links a { font-size: 0.95rem; }
+      nav.menu-open .nav-cta { margin-top: 0.4rem; }
       .intro-grid,
       .why-grid,
       .contacto-inner { grid-template-columns: 1fr; gap: 3rem; }
@@ -1129,6 +1150,16 @@
   const nav = document.getElementById('main-nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Menú móvil (hamburguesa)
+  const hamburger = document.getElementById('hamburger');
+  hamburger.addEventListener('click', () => {
+    nav.classList.toggle('menu-open');
+  });
+  // Cerrar el menú al tocar cualquier enlace
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => nav.classList.remove('menu-open'));
   });
 
   // Tabs

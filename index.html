@@ -84,7 +84,12 @@
       font-weight: 500 !important;
     }
     .nav-cta:hover { background: var(--ember) !important; color: var(--white) !important; }
-    .hamburger { display: none; cursor: pointer; z-index: 110; }
+    .hamburger {
+      display: none; cursor: pointer; z-index: 110;
+      background: none; border: none; padding: 10px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
     .hamburger span {
       display: block; width: 24px; height: 2px;
       background: var(--snow); margin: 5px 0;
@@ -801,9 +806,9 @@
     <li><a href="#por-que">Por qué Catedral</a></li>
     <li><a href="#contacto" class="nav-cta">Consultar</a></li>
   </ul>
-  <div class="hamburger" id="hamburger">
+  <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
     <span></span><span></span><span></span>
-  </div>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -1158,11 +1163,15 @@
   // Menú móvil (hamburguesa)
   const hamburger = document.getElementById('hamburger');
   hamburger.addEventListener('click', () => {
-    nav.classList.toggle('menu-open');
+    const open = nav.classList.toggle('menu-open');
+    hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
   // Cerrar el menú al tocar cualquier enlace
   document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => nav.classList.remove('menu-open'));
+    link.addEventListener('click', () => {
+      nav.classList.remove('menu-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
   });
 
   // Tabs
